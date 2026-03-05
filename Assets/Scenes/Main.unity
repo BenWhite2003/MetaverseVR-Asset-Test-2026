@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 1078808885}
   - component: {fileID: 1078808884}
   - component: {fileID: 1078808887}
+  - component: {fileID: 1078808888}
   m_Layer: 0
   m_Name: Powerboat
   m_TagString: Untagged
@@ -349,6 +350,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInputActionAsset: {fileID: -944628639613478452, guid: a2bfb8a8026bc474895949292106c3d3,
     type: 3}
+--- !u!114 &1078808888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078808883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3afda610f34267429d2943704d21db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentSpeed: 0
+  maxSpeed: 15
+  maxReverseSpeed: 5
+  acceleration: 1
+  deceleration: 1
+  turnSpeed: 30
+  minTurnFactor: 0.3
 --- !u!1 &1347252231
 GameObject:
   m_ObjectHideFlags: 0
