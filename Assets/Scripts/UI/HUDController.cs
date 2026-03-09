@@ -24,7 +24,8 @@ public class HUDController : MonoBehaviour
 
     private void SetSpeedText(float speed)
     {
-        speedText.text = speed.ToString();
+        float truncatedSpeed = Mathf.Floor(speed * 10f) / 10f;
+        speedText.text = truncatedSpeed.ToString();
     }
 
     private void SetReverseText(bool isReversing)

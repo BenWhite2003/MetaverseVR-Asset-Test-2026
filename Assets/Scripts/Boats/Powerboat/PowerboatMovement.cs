@@ -90,7 +90,7 @@ public class PowerboatMovement : MonoBehaviour
         // Apply the new velocity while maintaining the existing y velocity
         powerboatRB.velocity = new Vector3(moveDirection.x, powerboatRB.velocity.y, moveDirection.z);
 
-        OnSpeedChanged?.Invoke(powerboatRB.velocity.magnitude);
+        OnSpeedChanged?.Invoke(currentSpeed);
     }
     private void SteerBoat()
     {
