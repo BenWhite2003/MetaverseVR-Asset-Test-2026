@@ -32,6 +32,8 @@ public class PowerboatMovement : MonoBehaviour
     // Used by the turning method to ensure we have some turning even at high speeds
     [SerializeField] private float minTurnFactor = 0.3f;
 
+    private bool isCollidingWithObstacle = false;
+
     private void Awake()
     {
         // Get the Rigidbody component of the powerboat
@@ -46,6 +48,7 @@ public class PowerboatMovement : MonoBehaviour
     {
         ReadInput();
         SteerBoat();
+        HandleCollision();
     }
 
     private void FixedUpdate()
@@ -131,6 +134,25 @@ public class PowerboatMovement : MonoBehaviour
             // Toggle reverse gear
             isReversing = !isReversing;
             OnReverseToggled?.Invoke(isReversing);
+        }
+    }
+
+    private void HandleCollision()
+    {
+        if (isCollidingWithObstacle)
+        {
+            // If we collide with the island or another ship then we completely stop the powerboat
+            currentSpeed = 0f;
+            // Set colliding back to false so the powerboat doesn't get stuck on the obstacle forever
+            isCollidingWithObstacle = false;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Obstacle"))
+        {
+            isCollidingWithObstacle = true;
         }
     }
 }
