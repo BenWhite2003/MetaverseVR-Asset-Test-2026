@@ -17,6 +17,10 @@ public class MissionCompletionManager : MonoBehaviour
         HUDController.OnMissionComplete -= MissionComplete;
     }
 
+    private void Start()
+    {
+        Time.timeScale = 1f;
+    }
     private void MissionComplete()
     {
         StartCoroutine(PauseGame());
