@@ -10,11 +10,22 @@ public class HUDController : MonoBehaviour
     [SerializeField] TextMeshProUGUI reverseToggleText;
     [SerializeField] TextMeshProUGUI missionTimeText;
 
+
+    [SerializeField] GameObject dockedPortsideText;
+    [SerializeField] GameObject dockedWrongsideText;
+    [SerializeField] TextMeshProUGUI dockingTimeText;
+
+
+    [SerializeField] GameObject missionCompletePanel;
+
     private void OnEnable()
     {
         PowerboatMovement.OnSpeedChanged += SetSpeedText;
         PowerboatMovement.OnReverseToggled += SetReverseText;
         MissionTimeManager.OnTimeUpdated += SetMissionTimeText;
+
+        DockingArea.OnDockStateChanged += HandleDockingUI;
+        DockingArea.OnTimeLeftUpdated += SetDockingTimeText;
     }
 
     private void OnDisable()
@@ -22,6 +33,9 @@ public class HUDController : MonoBehaviour
         PowerboatMovement.OnSpeedChanged -= SetSpeedText;
         PowerboatMovement.OnReverseToggled -= SetReverseText;
         MissionTimeManager.OnTimeUpdated -= SetMissionTimeText;
+
+        DockingArea.OnDockStateChanged -= HandleDockingUI;
+        DockingArea.OnTimeLeftUpdated -= SetDockingTimeText;
     }
 
     private void SetSpeedText(float speed)
@@ -55,10 +69,51 @@ public class HUDController : MonoBehaviour
         missionTimeText.text = $"{hours:00}:{minutes:00}:{seconds:00}";
     }
 
+    private void SetDockingTimeText(float dockingTime)
+    {
+        // Calculates the dockingTime into seconds
+        int seconds = (int)(dockingTime % 60);
+
+        // Only set text if seconds is not below 0
+        if (seconds >= 0)
+        {
+            // Set the docking time text to show docking time left
+            dockingTimeText.text = $"Time Till Dock Completion: {seconds}";
+        }
+    }
+
 
     public void ResetGame()
     {
         // Loads the current scene (resets game)
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void HandleDockingUI(DockingState dockingState)
+    {
+        switch (dockingState)
+        {
+            case DockingState.None:
+                // Hide all docking UI
+                dockedPortsideText.SetActive(false);
+                dockedWrongsideText.SetActive(false);
+                break;
+
+            case DockingState.Portside:
+                // Show portside UI, and hide wrongside UI
+                dockedPortsideText.SetActive(true);
+                dockedWrongsideText.SetActive(false);
+                break;
+
+            case DockingState.WrongSide:
+                // Show the worngside UI, and hide the portside UI
+                dockedWrongsideText.SetActive(true);
+                dockedPortsideText.SetActive(false);
+                break;
+
+            case DockingState.DockingComplete:
+                // Show docking conplete UI panel
+                break;
+        }
     }
 }
