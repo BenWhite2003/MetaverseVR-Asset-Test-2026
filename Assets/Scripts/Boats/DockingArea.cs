@@ -62,9 +62,8 @@ public class DockingArea : MonoBehaviour
     {
         if (playerIsDocked && dockedBoat != null)
         {
-            if (IsBoatPortside(dockedBoat))
+            if (!IsDockingComplete && IsBoatPortside(dockedBoat))
             {
-                
                 // Sets the docking state to Portside
                 SetDockState(DockingState.Portside);
 
@@ -78,7 +77,7 @@ public class DockingArea : MonoBehaviour
                 OnTimeLeftUpdated?.Invoke(timeLeftInDock);
 
                 // Docking complete
-                if (!IsDockingComplete && timeInDock >= maxTimeInDock)
+                if (timeInDock >= maxTimeInDock)
                 {
                     IsDockingComplete = true;
                     SetDockState(DockingState.DockingComplete);
@@ -86,19 +85,25 @@ public class DockingArea : MonoBehaviour
             }
             else
             {
-                // Set the docking state to "WrongSide", this will tell the player that they need to reposition
-                SetDockState(DockingState.WrongSide);
+                if (!IsDockingComplete)
+                {
+                    // Set the docking state to "WrongSide", this will tell the player that they need to reposition
+                    SetDockState(DockingState.WrongSide);
 
-                // Resets timers
-                timeInDock = 0f;
-                timeLeftInDock = maxTimeInDock;
+                    // Resets timers
+                    timeInDock = 0f;
+                    timeLeftInDock = maxTimeInDock;
+                }
             }
         }
         else
         {
-            SetDockState(DockingState.None);
-            timeInDock = 0f;
-            timeLeftInDock = maxTimeInDock;
+            if (!IsDockingComplete)
+            {
+                SetDockState(DockingState.None);
+                timeInDock = 0f;
+                timeLeftInDock = maxTimeInDock;
+            }
         }
     }
 

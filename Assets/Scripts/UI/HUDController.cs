@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class HUDController : MonoBehaviour
 {
+    public static event Action OnMissionComplete;
+
     [SerializeField] TextMeshProUGUI speedText;
     [SerializeField] TextMeshProUGUI reverseToggleText;
     [SerializeField] TextMeshProUGUI missionTimeText;
@@ -16,7 +19,7 @@ public class HUDController : MonoBehaviour
     [SerializeField] TextMeshProUGUI dockingTimeText;
 
 
-    [SerializeField] GameObject missionCompletePanel;
+    [SerializeField] GameObject missionCompleteText;
 
     private void OnEnable()
     {
@@ -97,22 +100,31 @@ public class HUDController : MonoBehaviour
                 // Hide all docking UI
                 dockedPortsideText.SetActive(false);
                 dockedWrongsideText.SetActive(false);
+                missionCompleteText.SetActive(false);
                 break;
 
             case DockingState.Portside:
                 // Show portside UI, and hide wrongside UI
                 dockedPortsideText.SetActive(true);
                 dockedWrongsideText.SetActive(false);
+                missionCompleteText.SetActive(false);
                 break;
 
             case DockingState.WrongSide:
                 // Show the worngside UI, and hide the portside UI
                 dockedWrongsideText.SetActive(true);
                 dockedPortsideText.SetActive(false);
+                missionCompleteText.SetActive(false);
                 break;
 
             case DockingState.DockingComplete:
-                // Show docking conplete UI panel
+                // Show docking conplete UI panel, and hide the others
+                dockedPortsideText.SetActive(false);
+                dockedWrongsideText.SetActive(false);
+                missionCompleteText.SetActive(true);
+                
+
+                OnMissionComplete?.Invoke();
                 break;
         }
     }
