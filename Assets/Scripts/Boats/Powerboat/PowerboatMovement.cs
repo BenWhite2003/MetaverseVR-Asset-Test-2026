@@ -1,17 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PowerboatMovement : MonoBehaviour
 {
+    // Movement events
+    public static event Action<float> OnSpeedChanged;
+    public static event Action<bool> OnReverseToggled;
+
     private IPlayerInput input;
     private Rigidbody powerboatRB;
-    public float currentSpeed;
+    
+
+    // Movement variables
     [SerializeField] private float maxSpeed = 15f;
     [SerializeField] private float maxReverseSpeed = 5f;
     [SerializeField] private float acceleration = 1f;
     [SerializeField] private float deceleration = 1f;
 
+    public float currentSpeed;
     // Toggled by pressing R
     private bool isReversing = false;
 
@@ -81,6 +89,8 @@ public class PowerboatMovement : MonoBehaviour
         }
         // Apply the new velocity while maintaining the existing y velocity
         powerboatRB.velocity = new Vector3(moveDirection.x, powerboatRB.velocity.y, moveDirection.z);
+
+        OnSpeedChanged?.Invoke(powerboatRB.velocity.magnitude);
     }
     private void SteerBoat()
     {
@@ -120,6 +130,7 @@ public class PowerboatMovement : MonoBehaviour
         {
             // Toggle reverse gear
             isReversing = !isReversing;
+            OnReverseToggled?.Invoke(isReversing);
         }
     }
 }
