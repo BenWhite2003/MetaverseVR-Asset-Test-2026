@@ -14,12 +14,14 @@ public class HUDController : MonoBehaviour
     {
         PowerboatMovement.OnSpeedChanged += SetSpeedText;
         PowerboatMovement.OnReverseToggled += SetReverseText;
+        MissionTimeManager.OnTimeUpdated += SetMissionTimeText;
     }
 
     private void OnDisable()
     {
         PowerboatMovement.OnSpeedChanged -= SetSpeedText;
         PowerboatMovement.OnReverseToggled -= SetReverseText;
+        MissionTimeManager.OnTimeUpdated -= SetMissionTimeText;
     }
 
     private void SetSpeedText(float speed)
@@ -32,12 +34,25 @@ public class HUDController : MonoBehaviour
     {
         if (isReversing)
         {
+            // Sets the reverse toggle text to green if the boat is in reverse
             reverseToggleText.color = Color.green;
         }
         else
         {
+            // Sets the reverse toggle text to white if the boat is NOT in reverse
             reverseToggleText.color = Color.white;
         }
+    }
+
+    private void SetMissionTimeText(float missionTime)
+    {
+        // Calculate the mission time into hours, minutes, and seconds
+        int hours = (int)(missionTime / 3600);
+        int minutes = (int)(missionTime % 3600) / 60;
+        int seconds = (int)(missionTime % 60);
+
+        // Format time to display as 00:00:00
+        missionTimeText.text = $"{hours:00}:{minutes:00}:{seconds:00}";
     }
 
 
