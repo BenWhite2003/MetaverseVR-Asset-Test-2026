@@ -20,7 +20,7 @@ public class HUDController : MonoBehaviour
 
 
     [SerializeField] GameObject missionCompleteText;
-
+    
     private void OnEnable()
     {
         PowerboatMovement.OnSpeedChanged += SetSpeedText;
